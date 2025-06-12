@@ -1,6 +1,10 @@
+import os
 from flask import Flask, render_template, request, jsonify
 from groq import Groq
 from PyPDF2 import PdfReader
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -17,7 +21,7 @@ pdf_path = "doc/cloud_security_policy.pdf"
 pdf_content = extract_pdf_text(pdf_path)
 
 # Initialize Groq client
-client = Groq(api_key="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")  # Replace with your API key
+client = Groq(api_key=os.getenv("API_KEY"))  
 
 # Keep chat history (reset on server restart)
 chat_history = []
@@ -26,6 +30,7 @@ chat_history = []
 @app.route('/')
 def index():
     return render_template('index.html')
+
     
 # Handle user message
 @app.route('/ask', methods=['POST'])
